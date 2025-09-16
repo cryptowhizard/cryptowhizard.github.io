@@ -23,7 +23,7 @@ plugins:
   - jekyll-paginate
 
 # Build settings
-future: false
+future: true
 published: true
 show_drafts: false
 
