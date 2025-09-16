@@ -53,7 +53,7 @@ kramdown:
   smart_quotes: lsquo,rsquo,ldquo,rdquo
 
 # Build settings
-future: false
+future: true
 published: true
 show_drafts: false
 
