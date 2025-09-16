@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ '/feed.xml' | relative_url }}">
+
+    {%- seo -%}
+
+    <!-- Favicons (place files in /assets/favicons or /) -->
+    <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ '/favicon-32x32.png' | relative_url }}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ '/favicon-96x96.png' | relative_url }}" sizes="96x96">
+
+    <!-- Fonts (optional: host locally) -->
+    <link rel="preload" href="{{ '/assets/fonts/Inter-Regular.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ '/assets/fonts/Roboto-Regular.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" role="banner">
+      <div class="container">
+        <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="{{ '/' | relative_url }}">Home</a>
+          <a href="{{ '/tags/' | relative_url }}">Tags</a>
+          <a href="{{ '/about/' | relative_url }}">About</a>
+          <button class="theme-toggle" aria-label="Toggle dark mode" onclick="document.documentElement.classList.toggle('dark')">☾</button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="site-main" role="main">
+      <div class="container">
+        {{ content }}
+      </div>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <p>© {{ site.title }} {{ 'now' | date: '%Y' }} • <a href="{{ '/feed.xml' | relative_url }}">RSS</a></p>
+      </div>
+    </footer>
+  </body>
+  <script>
+    // Persist dark mode preference
+    (function() {
+      const root = document.documentElement;
+      const key = 'theme';
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        root.classList.toggle('dark', saved === 'dark');
+      }
+      document.addEventListener('click', function(e){
+        if(e.target && e.target.classList.contains('theme-toggle')){
+          const isDark = root.classList.toggle('dark');
+          localStorage.setItem(key, isDark ? 'dark' : 'light');
+        }
+      });
+    })();
+  </script>
+</html>
