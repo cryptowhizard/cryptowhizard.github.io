@@ -26,10 +26,12 @@
       <div class="container">
         <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="{{ '/' | relative_url }}">Home</a>
-          <a href="{{ '/tags/' | relative_url }}">Tags</a>
-          <a href="{{ '/about/' | relative_url }}">About</a>
-          <button class="theme-toggle" aria-label="Toggle dark mode" onclick="document.documentElement.classList.toggle('dark')">☾</button>
+          <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a>
+          <a href="{{ '/tags/' | relative_url }}"{% if page.url contains '/tags/' %} aria-current="page"{% endif %}>Tags</a>
+          <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about/' %} aria-current="page"{% endif %}>About</a>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <span class="theme-icon">☾</span>
+          </button>
         </nav>
       </div>
     </header>
@@ -45,22 +47,51 @@
         <p>© {{ site.title }} {{ 'now' | date: '%Y' }} • <a href="{{ '/feed.xml' | relative_url }}">RSS</a></p>
       </div>
     </footer>
-  </body>
-  <script>
-    // Persist dark mode preference
-    (function() {
-      const root = document.documentElement;
-      const key = 'theme';
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        root.classList.toggle('dark', saved === 'dark');
-      }
-      document.addEventListener('click', function(e){
-        if(e.target && e.target.classList.contains('theme-toggle')){
-          const isDark = root.classList.toggle('dark');
-          localStorage.setItem(key, isDark ? 'dark' : 'light');
+
+    <script>
+      // Enhanced dark mode toggle with better persistence and animation
+      (function() {
+        const root = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        const storageKey = 'crypto-blog-theme';
+        
+        // Check for saved theme preference or default to 'light'
+        const savedTheme = localStorage.getItem(storageKey);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        
+        // Apply theme on load
+        function applyTheme(theme) {
+          if (theme === 'dark') {
+            root.classList.add('dark');
+            themeIcon.textContent = '☀️';
+            themeToggle.setAttribute('aria-label', 'Switch to light mode');
+          } else {
+            root.classList.remove('dark');
+            themeIcon.textContent = '☾';
+            themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+          }
+          localStorage.setItem(storageKey, theme);
         }
-      });
-    })();
-  </script>
+        
+        // Initialize theme
+        applyTheme(currentTheme);
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', function() {
+          const isDark = root.classList.contains('dark');
+          const newTheme = isDark ? 'light' : 'dark';
+          applyTheme(newTheme);
+        });
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+          if (!localStorage.getItem(storageKey)) {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>
