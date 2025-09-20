@@ -1,43 +1,38 @@
 ---
 layout: default
-title: Home
-description: Daily professional crypto market insights and analysis.
+title: Tags
+description: Browse posts by tags
+permalink: /tags/
 ---
 
-<section class="home">
-  <h1 class="page-heading">Crypto Market Analysis Blog</h1>
-  <p class="lede">Welcome to our daily cryptocurrency market analysis blog. We provide professional insights and data-driven analysis of the crypto markets.</p>
+<section class="tags-page">
+  <h1 class="page-heading">Tags</h1>
+  <p class="lede">Browse all posts organized by tags.</p>
 
-  <h2>Latest Posts</h2>
-  <ul class="post-list" role="list">
-    {% for post in paginator.posts %}
-      <li class="post-list-item">
-        <article>
-          <header>
-            <h3 class="post-list-title"><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
-            <p class="post-list-meta">{{ post.date | date: "%b %-d, %Y" }}</p>
-          </header>
-          <p>{{ post.excerpt | strip_html | truncatewords: 32 }}</p>
-          {% if post.tags %}
-          <div class="post-tags">
-            {% for tag in post.tags %}
-              <a class="tag" href="{{ '/tags/#' | append: tag | relative_url }}">#{{ tag }}</a>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </article>
-      </li>
-    {% endfor %}
-  </ul>
+  {% assign tags = site.tags | sort %}
+  {% for tag in tags %}
+    <div class="tag-section" id="{{ tag[0] | slugify }}">
+      <h2 class="tag-heading">
+        <span class="tag-name">#{{ tag[0] }}</span>
+        <span class="tag-count">({{ tag[1].size }})</span>
+      </h2>
+      <ul class="tagged-posts" role="list">
+        {% for post in tag[1] %}
+          <li class="tagged-post-item">
+            <article>
+              <h3 class="tagged-post-title">
+                <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+              </h3>
+              <p class="tagged-post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
+              <p class="tagged-post-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
 
-  <nav class="pagination" role="navigation" aria-label="Pagination">
-    {% if paginator.previous_page %}
-      <a class="prev" href="{{ paginator.previous_page_path | relative_url }}">← Newer Posts</a>
-    {% endif %}
-    {% if paginator.next_page %}
-      <a class="next" href="{{ paginator.next_page_path | relative_url }}">Older Posts →</a>
-    {% endif %}
-  </nav>
-
-  <p class="rss-subscribe">Subscribe <a href="{{ '/feed.xml' | relative_url }}">via RSS</a></p>
+  {% if tags.size == 0 %}
+    <p class="no-tags">No tags found yet. Start adding tags to your posts!</p>
+  {% endif %}
 </section>
