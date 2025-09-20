@@ -1,0 +1,38 @@
+---
+layout: default
+title: Tags
+description: Browse posts by tags
+permalink: /tags/
+---
+
+<section class="tags-page">
+  <h1 class="page-heading">Tags</h1>
+  <p class="lede">Browse all posts organized by tags.</p>
+
+  {% assign tags = site.tags | sort %}
+  {% for tag in tags %}
+    <div class="tag-section" id="{{ tag[0] | slugify }}">
+      <h2 class="tag-heading">
+        <span class="tag-name">#{{ tag[0] }}</span>
+        <span class="tag-count">({{ tag[1].size }})</span>
+      </h2>
+      <ul class="tagged-posts" role="list">
+        {% for post in tag[1] %}
+          <li class="tagged-post-item">
+            <article>
+              <h3 class="tagged-post-title">
+                <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+              </h3>
+              <p class="tagged-post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
+              <p class="tagged-post-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+
+  {% if tags.size == 0 %}
+    <p class="no-tags">No tags found yet. Start adding tags to your posts!</p>
+  {% endif %}
+</section>
