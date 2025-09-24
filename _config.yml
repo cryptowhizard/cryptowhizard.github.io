@@ -2,7 +2,7 @@ title: Coin Trend Radar Market Analysis
 description: Daily cryptocurrency market insights and analysis
 lang: en
 timezone: America/New_York
-url: "https://cryptowhizard.github.io"
+url: "https://blog.cointrendradar.com"
 baseurl: "" # set to "" if deployed at root (username.github.io)
 
 theme: minima
